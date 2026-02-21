@@ -1,0 +1,18 @@
+{
+  "name": "autofill-resume-extension",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build:extension": "node scripts/build-extension.mjs",
+    "zip:extension": "cd dist/extension && zip -r ../extension.zip .",
+    "build": "npm run clean && npm run build:extension && npm run zip:extension",
+    "check": "npm run clean && npm run build:extension"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.302",
+    "esbuild": "^0.25.9",
+    "typescript": "^5.9.2"
+  }
+}

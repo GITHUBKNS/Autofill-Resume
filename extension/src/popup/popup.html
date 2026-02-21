@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="popup.css" />
+    <title>Resume Autofill Vault</title>
+  </head>
+  <body>
+    <main class="popup">
+      <h1>Resume Autofill Vault</h1>
+      <label for="profile">Profile</label>
+      <select id="profile"></select>
+      <button id="fill">Fill active tab</button>
+      <a class="link" href="options.html" target="_blank" rel="noreferrer">Manage profiles</a>
+      <pre id="status" aria-live="polite"></pre>
+    </main>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

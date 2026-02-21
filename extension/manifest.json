@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Resume Autofill Vault",
+  "version": "0.2.0",
+  "description": "Upload resume profiles and autofill job forms with preview and confirmation.",
+  "action": {
+    "default_title": "Resume Autofill Vault",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "service_worker.js",
+    "type": "module"
+  },
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": []
+}

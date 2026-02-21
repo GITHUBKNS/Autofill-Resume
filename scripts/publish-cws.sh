@@ -9,11 +9,20 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 ZIP="$ROOT/dist/extension.zip"
 
-if [[ ! -f "$ZIP" ]]; then
-  echo "dist/extension.zip not found. Building with bun fallback..."
+echo "Building fresh package to ensure manifest.json is at zip root..."
+if command -v npm >/dev/null 2>&1 && [[ -f "$ROOT/package.json" ]]; then
+  if npm run build >/dev/null 2>&1; then
+    :
+  else
+    "$ROOT/scripts/build-extension-bun.sh"
+    "$ROOT/scripts/package-extension.sh"
+  fi
+else
   "$ROOT/scripts/build-extension-bun.sh"
-  (cd "$ROOT/dist/extension" && zip -r ../extension.zip .)
+  "$ROOT/scripts/package-extension.sh"
 fi
+
+"$ROOT/scripts/verify-zip-manifest-root.sh" "$ZIP"
 
 TOKEN_JSON="$(curl -sS https://oauth2.googleapis.com/token \
   -d client_id="$CWS_CLIENT_ID" \

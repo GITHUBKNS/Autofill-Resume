@@ -34,7 +34,7 @@ Load `dist/extension` in Chrome:
 npm run build
 ```
 
-This creates `dist/extension.zip`.
+This creates `dist/extension.zip` and validates that `manifest.json` is at the root of the zip package.
 
 ## Publish to Chrome Web Store
 
@@ -62,7 +62,7 @@ If npm registry access is blocked, you can still build with Bun (already availab
 
 ```bash
 ./scripts/build-extension-bun.sh
-cd dist/extension && zip -r ../extension.zip .
+./scripts/package-extension.sh
 ```
 
 ## One-command Chrome Web Store publish (API)
@@ -83,3 +83,10 @@ Required variables:
 
 - This scaffold intentionally uses least-privilege extension permissions (`storage`, `scripting`, `activeTab`).
 - It is a production starter, not a full compliance-complete product. Add encryption, consent UX, and policy text before public launch.
+
+
+### Validate an existing zip package
+
+```bash
+./scripts/verify-zip-manifest-root.sh dist/extension.zip
+```

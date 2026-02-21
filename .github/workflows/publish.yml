@@ -13,6 +13,7 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: npm run build
+      - run: npm run verify:zip
       - name: Upload and publish to Chrome Web Store
         env:
           CWS_REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}

@@ -6,9 +6,10 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build:extension": "node scripts/build-extension.mjs",
-    "zip:extension": "cd dist/extension && zip -r ../extension.zip .",
+    "zip:extension": "./scripts/package-extension.sh",
     "build": "npm run clean && npm run build:extension && npm run zip:extension",
-    "check": "npm run clean && npm run build:extension"
+    "check": "npm run clean && npm run build:extension",
+    "verify:zip": "./scripts/verify-zip-manifest-root.sh dist/extension.zip"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.302",

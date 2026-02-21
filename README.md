@@ -55,6 +55,30 @@ Set these GitHub secrets before running it:
 
 Then trigger the workflow manually from GitHub Actions.
 
+
+## No-npm fallback build (for restricted environments)
+
+If npm registry access is blocked, you can still build with Bun (already available in this environment):
+
+```bash
+./scripts/build-extension-bun.sh
+cd dist/extension && zip -r ../extension.zip .
+```
+
+## One-command Chrome Web Store publish (API)
+
+With credentials exported as environment variables, run:
+
+```bash
+./scripts/publish-cws.sh
+```
+
+Required variables:
+- `CWS_REFRESH_TOKEN`
+- `CWS_CLIENT_ID`
+- `CWS_CLIENT_SECRET`
+- `CWS_EXTENSION_ID`
+
 ## Notes
 
 - This scaffold intentionally uses least-privilege extension permissions (`storage`, `scripting`, `activeTab`).

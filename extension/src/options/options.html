@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="options.css" />
+    <title>Profiles</title>
+  </head>
+  <body>
+    <main>
+      <h1>Profile Manager</h1>
+      <form id="profile-form">
+        <input id="displayName" placeholder="Display name" required />
+        <input id="firstName" placeholder="First name" required />
+        <input id="lastName" placeholder="Last name" required />
+        <input id="email" placeholder="Email" type="email" required />
+        <input id="phone" placeholder="Phone" />
+        <input id="city" placeholder="City" />
+        <button type="submit">Save profile</button>
+      </form>
+      <section>
+        <h2>Saved profiles</h2>
+        <ul id="profiles"></ul>
+      </section>
+      <section>
+        <h2>Publishing checklist</h2>
+        <ol>
+          <li>Build and zip with <code>npm run build</code>.</li>
+          <li>Upload <code>dist/extension.zip</code> in Chrome Web Store dashboard.</li>
+          <li>Set privacy disclosures and publish.</li>
+        </ol>
+      </section>
+    </main>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

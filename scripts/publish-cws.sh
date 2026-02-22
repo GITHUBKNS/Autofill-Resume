@@ -5,6 +5,7 @@ set -euo pipefail
 : "${CWS_CLIENT_ID:?Missing CWS_CLIENT_ID}"
 : "${CWS_CLIENT_SECRET:?Missing CWS_CLIENT_SECRET}"
 : "${CWS_EXTENSION_ID:?Missing CWS_EXTENSION_ID}"
+CWS_PUBLISH_TARGET="${CWS_PUBLISH_TARGET:-trustedTesters}"
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 ZIP="$ROOT/dist/extension.zip"
@@ -46,11 +47,11 @@ curl -sS -X PUT \
   "https://www.googleapis.com/upload/chromewebstore/v1.1/items/$CWS_EXTENSION_ID"
 
 echo
-echo "Publishing extension..."
+echo "Publishing extension to target: $CWS_PUBLISH_TARGET"
 curl -sS -X POST \
   -H "Authorization: Bearer $ACCESS_TOKEN" \
   -H "x-goog-api-version: 2" \
-  "https://www.googleapis.com/chromewebstore/v1.1/items/$CWS_EXTENSION_ID/publish"
+  "https://www.googleapis.com/chromewebstore/v1.1/items/$CWS_EXTENSION_ID/publish?publishTarget=$CWS_PUBLISH_TARGET"
 
 echo
 echo "Publish request submitted."

@@ -29,9 +29,18 @@ function detectValue(el: HTMLInputElement | HTMLTextAreaElement, profile: Candid
 function fill(profile: CandidateProfile): FillResult {
   const controls = Array.from(document.querySelectorAll('input, textarea')) as Array<HTMLInputElement | HTMLTextAreaElement>;
   let filled = 0;
+  let detected = 0;
 
   for (const el of controls) {
-    if (el instanceof HTMLInputElement && (el.type === 'hidden' || el.disabled)) continue;
+    if (el.disabled || el.readOnly) continue;
+
+    if (el instanceof HTMLInputElement) {
+      if (el.type === 'hidden') continue;
+      const textLike = ['text', 'search', 'email', 'tel', 'url', ''];
+      if (!textLike.includes(el.type)) continue;
+    }
+
+    detected += 1;
     const value = detectValue(el, profile);
     if (!value) continue;
     el.value = value;
@@ -41,7 +50,7 @@ function fill(profile: CandidateProfile): FillResult {
   }
 
   return {
-    detected: controls.length,
+    detected,
     filled,
     warnings: filled === 0 ? ['No confident matches found.'] : []
   };

@@ -30,12 +30,7 @@ TOKEN_JSON="$(curl -sS https://oauth2.googleapis.com/token \
   -d refresh_token="$CWS_REFRESH_TOKEN" \
   -d grant_type=refresh_token)"
 
-ACCESS_TOKEN="$(python3 - <<'PY'
-import json,sys
-obj=json.loads(sys.stdin.read())
-print(obj.get('access_token',''))
-PY
-<<< "$TOKEN_JSON")"
+ACCESS_TOKEN="$(printf '%s' "$TOKEN_JSON" | python3 -c "import json,sys; print(json.load(sys.stdin).get('access_token', ''))")"
 
 if [[ -z "$ACCESS_TOKEN" ]]; then
   echo "Failed to fetch OAuth token"

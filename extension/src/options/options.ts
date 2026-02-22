@@ -29,19 +29,23 @@ async function renderList(): Promise<void> {
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-  const profile: CandidateProfile = {
-    profileId: crypto.randomUUID(),
-    displayName: byId('displayName').value.trim(),
-    firstName: byId('firstName').value.trim(),
-    lastName: byId('lastName').value.trim(),
-    email: byId('email').value.trim(),
-    phone: byId('phone').value.trim() || undefined,
-    city: byId('city').value.trim() || undefined
-  };
+  try {
+    const profile: CandidateProfile = {
+      profileId: crypto.randomUUID(),
+      displayName: byId('displayName').value.trim(),
+      firstName: byId('firstName').value.trim(),
+      lastName: byId('lastName').value.trim(),
+      email: byId('email').value.trim(),
+      phone: byId('phone').value.trim() || undefined,
+      city: byId('city').value.trim() || undefined
+    };
 
-  await saveProfile(profile);
-  form.reset();
-  await renderList();
+    await saveProfile(profile);
+    form.reset();
+    await renderList();
+  } catch (error) {
+    alert(String(error));
+  }
 });
 
-void renderList();
+void renderList().catch((error) => alert(String(error)));

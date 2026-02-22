@@ -18,6 +18,12 @@ async function render(): Promise<void> {
   const profiles = await loadProfiles();
   profileSelect.innerHTML = '';
 
+  if (profiles.length === 0) {
+    fillButton.disabled = true;
+    setStatus('No profiles available. Use "Manage profiles" first.');
+    return;
+  }
+
   for (const p of profiles) {
     const option = document.createElement('option');
     option.value = p.profileId;
@@ -25,11 +31,17 @@ async function render(): Promise<void> {
     profileSelect.append(option);
   }
 
+  fillButton.disabled = false;
   setStatus(`Profiles: ${profiles.length}`);
 }
 
 fillButton.addEventListener('click', async () => {
   try {
+    if (!profileSelect.value) {
+      setStatus('Select a profile first.');
+      return;
+    }
+
     setStatus('Filling...');
     const response = await chrome.runtime.sendMessage({
       type: 'FILL_ACTIVE_TAB',

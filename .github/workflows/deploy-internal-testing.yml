@@ -1,0 +1,57 @@
+name: deploy-internal-testing
+
+on:
+  push:
+    branches:
+      - "cursor/general-bugs-90e4"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - name: Resolve publish credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          CWS_REFRESH_TOKEN="${{ secrets.CWS_REFRESH_TOKEN }}"
+          CWS_CLIENT_ID="${{ secrets.CWS_CLIENT_ID }}"
+          CWS_CLIENT_SECRET="${{ secrets.CWS_CLIENT_SECRET }}"
+          CWS_EXTENSION_ID="${{ secrets.CWS_EXTENSION_ID }}"
+
+          [[ -n "$CWS_REFRESH_TOKEN" ]] || CWS_REFRESH_TOKEN="${{ vars.CWS_REFRESH_TOKEN }}"
+          [[ -n "$CWS_CLIENT_ID" ]] || CWS_CLIENT_ID="${{ vars.CWS_CLIENT_ID }}"
+          [[ -n "$CWS_CLIENT_SECRET" ]] || CWS_CLIENT_SECRET="${{ vars.CWS_CLIENT_SECRET }}"
+          [[ -n "$CWS_EXTENSION_ID" ]] || CWS_EXTENSION_ID="${{ vars.CWS_EXTENSION_ID }}"
+
+          missing=()
+          for key in CWS_REFRESH_TOKEN CWS_CLIENT_ID CWS_CLIENT_SECRET CWS_EXTENSION_ID; do
+            value="${!key:-}"
+            if [[ -z "$value" ]]; then
+              missing+=("$key")
+              continue
+            fi
+            echo "::add-mask::$value"
+          done
+
+          if (( ${#missing[@]} > 0 )); then
+            echo "Missing publish configuration: ${missing[*]}"
+            exit 1
+          fi
+
+          {
+            echo "CWS_REFRESH_TOKEN=$CWS_REFRESH_TOKEN"
+            echo "CWS_CLIENT_ID=$CWS_CLIENT_ID"
+            echo "CWS_CLIENT_SECRET=$CWS_CLIENT_SECRET"
+            echo "CWS_EXTENSION_ID=$CWS_EXTENSION_ID"
+            echo "CWS_PUBLISH_TARGET=trustedTesters"
+          } >> "$GITHUB_ENV"
+
+      - name: Upload and publish to Chrome Web Store (trusted testers)
+        run: ./scripts/publish-cws.sh

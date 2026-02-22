@@ -34,7 +34,7 @@ Load `dist/extension` in Chrome:
 npm run build
 ```
 
-This creates `dist/extension.zip` and validates that `manifest.json` is at the root of the zip package.
+This creates `dist/extension.zip` and validates  that `manifest.json` is at the root of the zip package.
 
 ## Publish to Chrome Web Store
 
